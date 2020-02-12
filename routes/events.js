@@ -7,19 +7,26 @@
 
 const express = require('express');
 const router  = express.Router();
+const myFuncs = require("../public/scripts/helper");
+
+console.log(myFuncs.generateRandomString(10));
 
 module.exports = (db) => {
+
   router.get("/", (req, res) => {
-    db.query(`SELECT * FROM events;`)
-      .then(data => {
-        const events = data.rows;
-        res.json({ events });
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
+    if (typeof req.body.organizerEmail) {
+      res.render("index");
+    };
+    // db.query(`SELECT * FROM events;`)
+    //   .then(data => {
+    //     const events = data.rows;
+    //     res.json({ events });
+    //   })
+    //   .catch(err => {
+    //     res
+    //       .status(500)
+    //       .json({ error: err.message });
+    //   });
   });
 
   router.post("/", (req, res) => {
@@ -29,15 +36,18 @@ module.exports = (db) => {
         if (data.rows.length > 0) {
           const events = data.rows;
           console.log("Rows found: ", data.rows.length);
-          res.json({ events });
+          // res.json({ events });
+          res.render("eventList", { events: events});
         } else {
-          res.send(`No data found for ${userEmail}`);
+          //  No data found.
+          res.render("error", {msg: `No records found, please check the email provided: ${userEmail}`});
         }
       })
       .catch(err => {
         res
-          .status(500)
-          .json({ error: err.message });
+        .status(500)
+        .render("error", {msg: err.message});
+          // .json({ error: err.message });
       });
   });
   return router;
