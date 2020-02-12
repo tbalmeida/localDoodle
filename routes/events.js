@@ -21,5 +21,24 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+
+  router.post("/", (req, res) => {
+    const userEmail = req.body.organizerEmail;
+    db.query(`SELECT * FROM vw_events WHERE email = $1;`, [userEmail])
+      .then(data => {
+        if (data.rows.length > 0) {
+          const events = data.rows;
+          console.log("Rows found: ", data.rows.length);
+          res.json({ events });
+        } else {
+          res.send(`No data found for ${userEmail}`);
+        }
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
   return router;
 };

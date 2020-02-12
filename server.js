@@ -8,6 +8,7 @@ const express    = require("express");
 const bodyParser = require("body-parser");
 const sass       = require("node-sass-middleware");
 const app        = express();
+app.use(express.urlencoded());
 const morgan     = require('morgan');
 
 // PG database client/connection setup

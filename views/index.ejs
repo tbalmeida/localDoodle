@@ -1,17 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>Home Page</title>
 
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
   </head>
 
   <body>
-    <h1>Hello World!</h1>
+
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-2"></div>
+        <div class="col-md-auto-middle">
+          <h1>Welcome to Schoodle!</h1>
+          <small class="text-muted">Doodle's based project for educational purposes.</small>
+          <p><br></p>
+          <p>We are the neighborhood friendly way to schedule a meeting with your friends, providing them with options
+            of dates and time to choose from.
+            <br>There is no need to register or pay for anything. Just create a proposal and send them a link to the
+            page for your event and you're set to go!
+          </p>
+          <p>Schoodle is a midterm project for the Lighthouse Lab's Web Development Bootcamp, 2020-Jan Calgary Cohort.</p>
+
+          <p><br>We just need your email to get you started!</p>
+
+          <form method="POST" action="/events">
+            <div class="form-group">
+              <div class="form-group row">
+                <label for="organizerEmail" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control" id="organizerEmail" name="organizerEmail">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-lg-10">
+                  <button type="submit" class="btn btn-primary">Start</button>
+                </div>
+          </form>
+        </div>
+        <div class="col col-lg-2"></div>
+      </div>
+    </div>
+
   </body>
-</html>
+
+  </html>
