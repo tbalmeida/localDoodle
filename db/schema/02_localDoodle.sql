@@ -53,8 +53,12 @@ CREATE OR REPLACE VIEW vw_events AS
 
  CREATE OR REPLACE VIEW vw_attendees AS
   SELECT a.id, a.email, u.name, a.id_event, eo.date_time,
-  CASE ao.availability WHEN false THEN 'No' ELSE 'Yes'END AS available
+  CASE ao.availability WHEN false THEN 'No' ELSE 'Yes'END AS available,
+  e.title, e.url, e.description, e.location,
+  organizer.name organizer_name, organizer.email organizer_email
   FROM attendees a
+  INNER JOIN events e ON a.id_event = e.id
+  INNER JOIN users organizer ON e.id_organizer = organizer.id
   LEFT JOIN attendee_options ao ON a.id = ao.id_attendee
   LEFT JOIN event_options eo ON ao.id_option = eo.id
   LEFT JOIN users u ON a.email = u.email
