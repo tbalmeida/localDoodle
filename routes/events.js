@@ -9,8 +9,6 @@ const express = require('express');
 const router  = express.Router();
 const myFuncs = require("../public/scripts/helper");
 
-console.log(myFuncs.generateRandomString(10));
-
 module.exports = (db) => {
 
   router.get("/", (req, res) => {
@@ -33,21 +31,13 @@ module.exports = (db) => {
     const userEmail = req.body.organizerEmail;
     db.query(`SELECT * FROM vw_events WHERE email = $1;`, [userEmail])
       .then(data => {
-        if (data.rows.length > 0) {
-          const events = data.rows;
-          console.log("Rows found: ", data.rows.length);
-          // res.json({ events });
-          res.render("eventList", { events: events});
-        } else {
-          //  No data found.
-          res.render("error", {msg: `No records found, please check the email provided: ${userEmail}`});
-        }
+        console.log("Rows found: ", data.rows.length);
+
+        const templateVars = {events: data.rows, userEmail: userEmail};
+        res.render("eventList", templateVars);
       })
       .catch(err => {
-        res
-        .status(500)
-        .render("error", {msg: err.message});
-          // .json({ error: err.message });
+        res.status(500).render("error", {msg: err.message});
       });
   });
   return router;

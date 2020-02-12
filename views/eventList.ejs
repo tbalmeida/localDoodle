@@ -14,16 +14,17 @@
   </thead>
   <tbody>
     <% for (const item of events) { %>
-    <tr>
-      <th scope="row"><%=item.title%></th>
-      <td><%= item.location %></td>
-      <td><%= item.description %></td>
-      <td><%- item.options.replace(',', '<br>') -%></td>
-      <td><%= item.qty_attendees %></td>
-      <td><a href="events/<%item.shortURL%>" class="btn btn-dark">Edit</a></td>
-    </tr>
-    <% } %>
-  </tbody>
-</table>
+      <tr>
+        <th scope="row"><%=item.title%></th>
+        <td><%= item.location %></td>
+        <td><%= item.description %></td>
+        <td><%- item.options.replace(',', '<br>') -%></td>
+        <td><%= item.qty_attendees %></td>
+        <td><a href="events/<%item.shortURL%>" class="btn btn-dark">Edit</a></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <button type="button" class="btn btn-primary"> + </button>
 
 <%- include('partials/_footer') %>
