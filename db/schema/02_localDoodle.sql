@@ -1,4 +1,5 @@
 DROP VIEW IF EXISTS vw_events;
+DROP VIEW IF EXISTS vw_attendees;
 DROP TABLE IF EXISTS attendee_options;
 DROP TABLE IF EXISTS attendees;
 DROP TABLE IF EXISTS event_options;
