@@ -40,5 +40,9 @@ module.exports = (db) => {
         res.status(500).render("error", {msg: err.message});
       });
   });
+
+
+
+  
   return router;
 };
