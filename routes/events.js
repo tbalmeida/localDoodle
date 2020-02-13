@@ -41,39 +41,42 @@ module.exports = (db) => {
   });
 
   router.post("/new", (req, res) => {
+    console.log('before posting')
     //insert into db
     // const queryString4 = `INSERT INTO attendees (id_event, email) VALUES ($1, $2) RETURNING *`;
     // const values4 = [id_event, req.body.invitees];
       db.query(`SELECT id FROM users WHERE email = $1;`, [req.body.email])
       .then(data => {
-        let userId = data.rows[0].id ;
-        console.log('userId', userId)
-        if (!userId) {
+        console.log('data rows length:', data.rows.length)
+        if (data.rows.length === 0) {
           const queryString1 = `INSERT INTO users (name, email) VALUES($1, $2) returning *;`;
           const values1 = [req.body.name, req.body.email];
           let id_organizer;
           const output = db.query(queryString1, values1)
             .then(result => {
               id_organizer = result.rows[0].id;
-              console.log(id_organizer);
+              console.log('id organizer', id_organizer);
               const queryString2 = `INSERT INTO events (id_organizer, url, title, location, description) VALUES ($1, $2, $3, $4, $5) returning *;`;
               const values2 = [id_organizer, 'e' + generateRandromString(6), req.body.title, req.body.location, req.body.description];
               return db.query(queryString2, values2)
             .then(result => {
+              console.log('first result after inserting into events:', result)
               const id_event = result.rows[0].id;
               const queryString3 = `INSERT INTO event_options (id_event, dt_event, hh_event) VALUES ($1, $2, $3) returning *;`;
               const values3 = [id_event, req.body.date, req.body.time];
               return db.query(queryString3, values3)
             .then(result => {
-              console.log(result);
+              console.log('result:', result);
+              console.log('reached 1 if')
               res.redirect(`/events/u/${id_organizer}`)
               return result;
             }).catch(err => console.error('query error', err.stack));
           })
         })
         } else {
+          id_organizer = data.rows[0].id;
           const queryString2 = `INSERT INTO events (id_organizer, url, title, location, description) VALUES ($1, $2, $3, $4, $5) returning *;`;
-              const values2 = [userId, 'e' + generateRandromString(6), req.body.title, req.body.location, req.body.description];
+              const values2 = [data.rows[0].id, 'e' + generateRandromString(6), req.body.title, req.body.location, req.body.description];
               return db.query(queryString2, values2)
             .then(result => {
               const id_event = result.rows[0].id;
@@ -82,6 +85,7 @@ module.exports = (db) => {
               return db.query(queryString3, values3)
             .then(result => {
               console.log(result);
+              console.log('reached 2nd else')
               res.redirect(`/events/u/${id_organizer}`)
               return result;
             }).catch(err => console.error('query error', err.stack));
@@ -89,7 +93,9 @@ module.exports = (db) => {
         }
       })      
       .catch(err => {
-        res.status(500).render("error", {msg: err.message});
+        console.log('before catching error')
+        console.error('query error', err.stack)
+        // res.status(500).render("error", {msg: err.message});
       });
     
 })
@@ -105,9 +111,11 @@ module.exports = (db) => {
       .then(result => {
         //creating a variable to save an array of objects
         const events = result.rows;
+        console.log('events', events)
         // req.session.user_id = user.name;
         // console.log(user);
         // console.log('reqparamsidevent', req.params.id_event)
+        console.log('reached get id_user')
         res.render('eventList', { events: events})
         return events;
       }).catch(err => console.error('query error', err.stack));
