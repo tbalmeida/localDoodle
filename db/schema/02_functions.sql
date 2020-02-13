@@ -31,32 +31,39 @@ CREATE OR REPLACE FUNCTION addUser (
     END IF;
 
     RETURN idUser;
-    END
-    $$
-    LANGUAGE plpgsql;
-
+  END
+  $$
+  LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION addEvent (
   pName VARCHAR(255),
-  pEmail VARCHAR(255),
+  pEmail VARCHAR(100),
   pTitle VARCHAR(255),
   pLocation VARCHAR(255),
-  pDescription TEXT
-)
-RETURNS VARCHAR(10)
-AS
-$$
-DECLARE
-  idUser INTEGER;
-  vURL VARCHAR(10);
-BEGIN
-  SELECT addUser ( pName, pEmail ) INTO idUser;
-  SELECT getHandle ( 10 ) INTO vURL;
+  pDescription TEXT,
+  pdt_event VARCHAR(10),
+  phh_event VARCHAR(5)
+  )
+ RETURNS VARCHAR(10)
+ AS
+ $$
+ DECLARE
+  vID_user INTEGER;
+  vID_event INTEGER;
+  vURL varchar(10);
 
-  INSERT INTO events ( id_organizer, url, title, location, description)
-   VALUES ( idUser, vURL, pTitle, pLocation, pDescription);
+ BEGIN
 
-  RETURN vURL;
-END
+  SELECT addUser ( pName, pEmail ) INTO vID_user;
+
+  INSERT INTO events ( id_organizer, title, location, description)
+    VALUES ( vID_user, pTitle, pLocation, pDescription) RETURNING url INTO vURL;
+
+  SELECT last_value FROM events_id_seq INTO vID_event;
+
+  INSERT INTO event_options (id_event, dt_event, hh_event) VALUES (vID_event, pdt_event, phh_event);
+
+ RETURN vURL;
+ END
 $$
 LANGUAGE plpgsql;
