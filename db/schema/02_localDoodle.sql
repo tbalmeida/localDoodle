@@ -42,12 +42,12 @@ CREATE TABLE attendee_options (
   PRIMARY KEY (id_user, id_option)
 );
 
-CREATE OR REPLACE VIEW vw_events AS
-
+CREATE OR REPLACE VIEW vw_events
+AS
 SELECT u.name, u.email, id_organizer, url, title, description, location, eo.id id_option, dt_event, hh_event
 FROM users u
 INNER JOIN events e ON u.id = e.id_organizer
-LEFT JOIN event_options eo ON e.id = eo.id_event
+LEFT JOIN event_options eo ON e.id = eo.id_event;
 
 CREATE OR REPLACE VIEW vw_events
 AS
