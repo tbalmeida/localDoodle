@@ -25,10 +25,15 @@
   <body class="bg-light container">
         <div class="row">
             <div class="col">
-                <label for="title">URL</label>
-                <input type="text" name="url" id="url" class="form-control" placeholder="Url" value="http://localhost:8080/events/<%=events[0].url%>">
-                </div>
+                <label for="url">URL</label>
+                <input type="text" name="url" id="url" class="url form-control" placeholder="Url" value="http://localhost:8080/events/<%=events[0].url%>">
             </div>
+            <div class="col">
+                <button type="button" id="copy" class="btn-copy-link btn btn-primary">Copy link</button>
+
+            </div>
+
+        </div> 
         <div class="row">
             <div class="col">
                 <label for="name">Name</label>
