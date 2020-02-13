@@ -1,6 +1,11 @@
 <%- include('partials/_header') %>
 
 <h2>Your events</h2>
+
+<%if(events.length === 0) {%>
+  <p>Sorry there are no events found for you. Please add an event.</p>
+  <%}%>
+
 <table class="table table-hover">
   <thead>
     <tr>

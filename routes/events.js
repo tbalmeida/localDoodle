@@ -21,9 +21,10 @@ const generateRandromString = require('../public/scripts/helperFunction');
 module.exports = (db) => {
 
   router.get("/", (req, res) => {
-    const userEmail = req.body.organizerEmail;
+    const userEmail = req.query.organizerEmail;
     db.query(`SELECT * FROM vw_events WHERE email = $1;`, [userEmail])
       .then(data => {
+        console.log('first result of data rows:', data.rows)
         console.log("Rows found: ", data.rows.length);
   
         const templateVars = {events: data.rows, userEmail: userEmail};
@@ -95,7 +96,7 @@ module.exports = (db) => {
       .catch(err => {
         console.log('before catching error')
         console.error('query error', err.stack)
-        // res.status(500).render("error", {msg: err.message});
+        res.status(500).render("error", {msg: err.message});
       });
     
 })
