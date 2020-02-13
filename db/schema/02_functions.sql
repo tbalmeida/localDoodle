@@ -31,10 +31,9 @@ CREATE OR REPLACE FUNCTION addUser (
     END IF;
 
     RETURN idUser;
-    END
-    $$
-    LANGUAGE plpgsql;
-
+  END
+  $$
+  LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION addEvent (
   pName VARCHAR(255),
@@ -50,22 +49,61 @@ CREATE OR REPLACE FUNCTION addEvent (
  $$
  DECLARE
   vID_user INTEGER;
-  vURL VARCHAR(10);
   vID_event INTEGER;
+  vURL varchar(10);
 
  BEGIN
 
   SELECT addUser ( pName, pEmail ) INTO vID_user;
-  SELECT getHandle ( 10 ) INTO vURL;
 
-  INSERT INTO events ( id_organizer, url, title, location, description)
-    VALUES ( vID_user, vURL, pTitle, pLocation, pDescription);
+  INSERT INTO events ( id_organizer, title, location, description)
+    VALUES ( vID_user, pTitle, pLocation, pDescription) RETURNING url INTO vURL;
 
   SELECT last_value FROM events_id_seq INTO vID_event;
 
   INSERT INTO event_options (id_event, dt_event, hh_event) VALUES (vID_event, pdt_event, phh_event);
 
  RETURN vURL;
+ END
+$$
+LANGUAGE plpgsql;
+
+
+-- select addAttendee('Thor Odinson', 'thor@asgard.gods', 'eNc6xu5Nl', 7, true)
+
+CREATE OR REPLACE FUNCTION addAttendee (
+  pName VARCHAR(255),
+  pEmail VARCHAR(100),
+  pURL VARCHAR(10),
+  pID_option INTEGER,
+  pAvailability BOOLEAN
+)
+ RETURNS VARCHAR(10)
+ AS
+ $$
+ DECLARE
+  vID_user INTEGER;
+  vID_event INTEGER;
+  vUsername VARCHAR(10);
+
+ BEGIN
+
+  SELECT addUser ( pName, pEmail ) INTO vID_user;
+
+  SELECT username into vUsername FROM users WHERE id = vID_user;
+
+  SELECT id INTO vID_event FROM events WHERE url = pURL;
+
+  PERFORM id_user FROM attendance WHERE id_user = vID_user;
+  IF NOT FOUND THEN
+    INSERT INTO attendance (id_event, id_user) VALUES (vID_event, vID_user);
+  END IF;
+
+  INSERT INTO attendee_options (id_option, id_user, availability) VALUES (pID_option, vID_user, pAvailability);
+
+  SELECT last_value FROM events_id_seq INTO vID_event;
+
+ RETURN vUsername;
  END
 $$
 LANGUAGE plpgsql;

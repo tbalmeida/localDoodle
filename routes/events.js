@@ -141,5 +141,22 @@ module.exports = (db) => {
     return;
   });
 
+  router.get("/:id/edit", (req, res) => {
+    const queryString = `select * FROM vw_events WHERE url = $1;` 
+    const values = [req.params.id];
+
+    const output = db.query(queryString, values)
+      .then(result => {
+        //creating a variable to save an array of objects
+        const events = result.rows;
+        console.log('events', events)
+        console.log('reached get id_user')
+        res.render('event_edit', { events: events})
+        return events;
+      }).catch(err => console.error('query error', err.stack));
+
+    return;
+  });
+
   return router;
 };
