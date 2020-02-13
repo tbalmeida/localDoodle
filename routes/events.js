@@ -125,7 +125,6 @@ module.exports = (db) => {
   router.get("/:id", (req, res) => {
     console.log(req.params.id_user)
     // res.send(req.params.id_user)
-
     const queryString = `select * FROM vw_events WHERE url = $1;` 
     const values = [req.params.id];
 
@@ -134,15 +133,10 @@ module.exports = (db) => {
         //creating a variable to save an array of objects
         const events = result.rows;
         console.log('events', events)
-        // req.session.user_id = user.name;
-        // console.log(user);
-        // console.log('reqparamsidevent', req.params.id_event)
         console.log('reached get id_user')
-        res.render('eventList', { events: events})
+        res.render('event', { events: events})
         return events;
       }).catch(err => console.error('query error', err.stack));
-    // console.log("TCL: output", output)
-    // render data using template variables
 
     return;
   });
