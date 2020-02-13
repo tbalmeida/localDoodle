@@ -44,13 +44,6 @@ CREATE TABLE attendee_options (
 
 CREATE OR REPLACE VIEW vw_events
 AS
-SELECT u.name, u.email, id_organizer, url, title, description, location, eo.id id_option, dt_event, hh_event
-FROM users u
-INNER JOIN events e ON u.id = e.id_organizer
-LEFT JOIN event_options eo ON e.id = eo.id_event;
-
-CREATE OR REPLACE VIEW vw_events
-AS
 SELECT e.id id_event, title, url, description, location, u.name, u.email, count(a.id_user) qty_attendees
 , array_to_string(ARRAY(SELECT CONCAT(dt_event,' ', hh_event)
   FROM event_options WHERE (event_options.id_event = e.id)), ', ') AS options
