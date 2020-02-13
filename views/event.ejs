@@ -19,9 +19,16 @@
   </head>
   <header>
     <%- include partials/_header %>
-    <% let date = events[0].options.split(' ') %>;
+    <% let date = events[0].options.split(' ') %>
   </header>
-  <body class="bg-light ">
+  <h2 class="text-center" >Your event</h2>
+  <body class="bg-light container">
+        <div class="row">
+            <div class="col">
+                <label for="title">URL</label>
+                <input type="text" name="url" id="url" class="form-control" placeholder="Url" value="http://localhost:8080/events/<%=events[0].url%>">
+                </div>
+            </div>
         <div class="row">
             <div class="col">
                 <label for="name">Name</label>
