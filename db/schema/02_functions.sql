@@ -42,7 +42,7 @@ CREATE OR REPLACE FUNCTION addEvent (
   pLocation VARCHAR(255),
   pDescription TEXT,
   pdt_event VARCHAR(10),
-  phh_event VARCHAR(5)
+  phh_event VARCHAR(8)
   )
  RETURNS VARCHAR(10)
  AS
@@ -67,9 +67,6 @@ CREATE OR REPLACE FUNCTION addEvent (
  END
 $$
 LANGUAGE plpgsql;
-
-
--- select addAttendee('Thor Odinson', 'thor@asgard.gods', 'eNc6xu5Nl', 7, true)
 
 CREATE OR REPLACE FUNCTION addAttendee (
   pName VARCHAR(255),
@@ -99,11 +96,103 @@ CREATE OR REPLACE FUNCTION addAttendee (
     INSERT INTO attendance (id_event, id_user) VALUES (vID_event, vID_user);
   END IF;
 
-  INSERT INTO attendee_options (id_option, id_user, availability) VALUES (pID_option, vID_user, pAvailability);
+  PERFORM id_user FROM attendee_options WHERE id_user = vID_user AND id_option = pID_option;
+  IF NOT FOUND THEN
+    INSERT INTO attendee_options (id_option, id_user, availability) VALUES (pID_option, vID_user, pAvailability);
+  END IF;
 
   SELECT last_value FROM events_id_seq INTO vID_event;
 
  RETURN vUsername;
+ END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION updateEvent (
+  pURL VARCHAR(10),
+  pTitle VARCHAR(255),
+  pLocation VARCHAR(255),
+  pDescription TEXT,
+  pdt_event VARCHAR(10),
+  phh_event VARCHAR(8),
+  pUsername VARCHAR(10),
+  pid_option INTEGER
+  )
+ RETURNS void
+ AS
+ $$
+ DECLARE
+  vID_user INTEGER;
+  vID_event INTEGER;
+
+ BEGIN
+
+  SELECT id INTO vID_user FROM users WHERE username = pUsername;
+
+  SELECT id INTO vID_event FROM events WHERE url = pURL;
+
+  UPDATE events
+    SET title = pTitle, location = pLocation, description = pDescription
+    WHERE id_organizer = vID_user AND url = pURL
+  RETURNING id INTO vID_event;
+
+  UPDATE event_options
+    SET dt_event = pdt_event, hh_event = phh_event
+    WHERE id_event = vID_event AND id = pid_option;
+
+ END
+$$
+LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION updateAttendeeOption (
+  pUsername VARCHAR(10),
+  pURL VARCHAR(10),
+  pID_option INTEGER,
+  pAvailability BOOLEAN
+)
+ RETURNS void
+ AS
+ $$
+ DECLARE
+  vID_user INTEGER;
+  vID_event INTEGER;
+
+ BEGIN
+
+  SELECT id into vID_user FROM users WHERE username = pUsername;
+
+  SELECT id INTO vID_event FROM events WHERE url = pURL;
+
+  UPDATE attendee_options
+    SET availability = pAvailability
+    WHERE id_option = pID_option
+      AND id_user = vID_user;
+
+ END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deleteAttendeeOption (
+  pUsername VARCHAR(10),
+  pURL VARCHAR(10),
+  pID_option INTEGER
+)
+ RETURNS void
+ AS
+ $$
+ DECLARE
+  vID_user INTEGER;
+  vID_event INTEGER;
+
+ BEGIN
+
+  SELECT id into vID_user FROM users WHERE username = pUsername;
+
+  SELECT id INTO vID_event FROM events WHERE url = pURL;
+
+  DELETE FROM attendee_options WHERE id_option = pID_option AND id_user = vID_user;
+
  END
 $$
 LANGUAGE plpgsql;

@@ -14,15 +14,18 @@
     <!-- <script src="https://code.jquery.com/jquery-1.12.4.js" defer></script> -->
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
     <link rel="stylesheet" href="/styles/timepicker.css" type="text/css" />
+    <script type="text/javascript" src="/scripts/redirectToList.js" defer></script>
+    
 
   
   </head>
   <header>
     <%- include partials/_header %>
-    <% let date = events[0].options.split(' ') %>
+   
   </header>
-  <h2 class="text-center" >Your event</h2>
+  <h2 class="text-center" >Your event was created and now you can copy the link</h2>
   <body class="bg-light container">
+      
         <div class="row">
             <div class="col">
                 <label for="url">URL</label>
@@ -51,11 +54,11 @@
         <div class="row">
             <div class="col">
                 <label for="date">Date</label>
-                <input type="text" name="date" id="date" class="form-control" placeholder="Date" value="<%=date[0]%>" disabled>
+                <input type="text" name="date" id="date" class="form-control" placeholder="Date" value="<%=events[0].dt_event%>" disabled>
             </div>
             <div class="col">
                 <label for="time">Time</label>
-                <input type="text" id="time" name="time" class="form-control" placeholder="Time" value="<%=date[1]%>">
+                <input type="text" id="time" name="time" class="form-control" placeholder="Time" value="<%=events[0].hh_event%>">
             </div disabled>
         </div>
         <div class="row">
@@ -79,9 +82,21 @@
         
         <div class="row">
             <div class="col">
-                <form method="EDIT" action="/events/<%= events[0].url %>/edit">
-                    <button type="submit" class="btn btn-primary">Edit</button>
-                </form>
+                <script>
+
+                    function redirectToList() {
+                        console.log('hello world')
+                        let email = document.getElementById("email").value;
+                        console.log(email);
+                        let emailArr = email.split('@');
+                        let firstPart = emailArr[0];
+                        let secondPart = emailArr[1];
+                        console.log(email)
+                        let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
+                       window.location = route;
+                      }
+                </script>
+                <button onclick = "redirectToList()" class="btn btn-primary">View all events</button>
             </div>
             <div class="col">
                 <button type="reset" class="btn btn-danger float-right">Reset</button>
@@ -97,7 +112,6 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/vendor/datepicker.js"></script>
     <script src="/vendor/timepicker.js"></script>
-
     <script type="text/javascript" src="/scripts/app.js"></script>
    </body>
 </html>

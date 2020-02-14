@@ -14,22 +14,18 @@
     <!-- <script src="https://code.jquery.com/jquery-1.12.4.js" defer></script> -->
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
     <link rel="stylesheet" href="/styles/timepicker.css" type="text/css" />
-
-  
-  </head>
-  <header>
+    
+    
+</head>
+<header>
     <%- include partials/_header %>
-    <% let date = events[0].options.split(' ') %>
-  </header>
-  <h2 class="text-center" >Your event</h2>
-  <body class="bg-light container">
+</header>
+<body class="bg-light container">
+    <form method="POST" action="/events/<%= events[0].url %>/edit">
         <div class="row">
             <div class="col">
                 <label for="url">URL</label>
-                <input type="text" name="url" id="url" class="form-control" placeholder="Url" value="http://localhost:8080/events/<%=events[0].url%>">
-            </div>
-            <div class="col">
-                <button type="button" id="copy" class=" btn btn-primary float-right">Copy link</button>
+                <input type="text" name="url" id="url" class="form-control" placeholder="Url" value="<%=events[0].url%>">
             </div>
         </div> 
         <div class="row">
@@ -51,17 +47,21 @@
         <div class="row">
             <div class="col">
                 <label for="date">Date</label>
-                <input type="text" name="date" id="date" class="form-control" placeholder="Date" value="<%=date[0]%>" >
+                <input type="text" name="date" id="date" class="form-control" placeholder="Date" value="<%=events[0].dt_event%>" >
             </div>
             <div class="col">
                 <label for="time">Time</label>
-                <input type="text" id="time" name="time" class="form-control" placeholder="Time" value="<%=date[1]%>">
+                <input type="text" id="time" name="time" class="form-control" placeholder="Time" value="<%=events[0].hh_event%>">
             </div >
         </div>
         <div class="row">
             <div class="col">
                 <label for="location">Location</label>
                 <input type="text" name="location" id="location" class="form-control" placeholder="Location" value="<%=events[0].location%>" >
+                <input type="hidden" name='id_option' value="<%=events[0].id_option%>">
+                <input type="hidden" name='organizer_username' value="<%=events[0].organizer_username%>">
+                <input type="hidden" name='organizer_email' value="<%=events[0].organizer_email%>">
+
             </div>
         </div>
         <div class="row">
@@ -69,23 +69,17 @@
                 <label for="Description">Description</label>
                 <textarea name="description" id="description" class="form-control" rows="3" placeholder="Description of the event" ><%=events[0].description%></textarea>
             </div>
+
         </div>
         <div class="row">
             <div class="col">
-                <label for="Invitees">Invitees</label>
-                <textarea name="invitees" id="invitees" class="form-control" rows="3" placeholder="Type the emails separated by a comma"></textarea>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col">
+                    <button type="reset" class="btn btn-danger float-right">Reset</button>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <form method="EDIT" action="/events/<%= events[0].url %>/edit">
-                    <a type="submit" class="btn btn-primary">Edit</a>
-                </form>
-            </div>
-            <div class="col">
-                <button type="reset" class="btn btn-danger float-right">Reset</button>
-            </div>
-        </div>
+        </form>
     
 
     <script src="https://code.jquery.com/jquery-3.4.1.js" 

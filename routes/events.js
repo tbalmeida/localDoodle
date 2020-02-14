@@ -142,7 +142,7 @@ module.exports = (db) => {
   });
 
   router.get("/:id/edit", (req, res) => {
-    const queryString = `select * FROM vw_events WHERE url = $1;` 
+    const queryString = `select * FROM vw_event_details WHERE url = $1;` 
     const values = [req.params.id];
 
     const output = db.query(queryString, values)
@@ -157,6 +157,21 @@ module.exports = (db) => {
 
     return;
   });
-
+  
+  router.post("/:id/edit", (req, res) => {
+    let email = req.body.email;
+    let emailArr = email.split('@');
+    let firstPart = emailArr[0];
+    let secondPart = emailArr[1];
+    console.log(email)
+    let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
+    const usersData = db.query(`select username from users where url `) 
+    const values = [req.body.url, req.body.title, req.body.location, req.body.description, req.body.date, req.body.time, req.body.organizer_username, req.body.id_option];
+      db.query(`select updateEvent ($1, $2, $3, $4, $5, $6, $7, $8) as url` , values)
+      .then(result => {
+        res.redirect(route);
+      })
+  });
+  
   return router;
 };
