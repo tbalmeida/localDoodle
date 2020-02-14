@@ -172,18 +172,21 @@ module.exports = (db) => {
       })
   });
 
-  router.delete("/:id/delete", (req, res) => {
-    let id = res.params.id;
-    // let email = req.body.email;
-    // let emailArr = email.split('@');
-    // let firstPart = emailArr[0];
-    // let secondPart = emailArr[1];
-    // let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
+  router.post("/:id/delete", (req, res) => {
+    let id = req.body.id;
+    console.log('id in a delete route:', id)
+    let email = req.body.email;
+    console.log('email in delete route', email)
+    let emailArr = email.split('@');
+    let firstPart = emailArr[0];
+    let secondPart = emailArr[1];
+    let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
 
     const values = [id];
       db.query(`delete from events where url = $1` , values)
       .then(result => {
-        res.send('Deleted!');
+        console.log('result of delete:', result)
+        res.redirect(route);
       })
   });
   

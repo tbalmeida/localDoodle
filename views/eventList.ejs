@@ -28,6 +28,8 @@
           <td><%= item.qty_attendees %></td>
           <td><a href="events/<%=item.url%>/edit" class="btn btn-primary">Edit</a> 
             <form method="POST" action="events/<%=item.url%>/delete">
+              <input type='hidden' name='id' value='<%=item.url%>'>
+              <input type='hidden' name='email' value='<%=userEmail%>'>
               <button class="btn btn-danger">Delete</button></td>
             </form>
         </tr>
