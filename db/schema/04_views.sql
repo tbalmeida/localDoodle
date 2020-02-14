@@ -22,3 +22,15 @@ LEFT JOIN attendee_options ao ON a.id_user = ao.id_user
 LEFT JOIN event_options eo ON ao.id_option = eo.id
 LEFT JOIN users u ON a.id_user = u.id
 ORDER BY a.id_event, eo.dt_event, eo.hh_event, u.name;
+
+CREATE VIEW vw_attendance
+AS
+SELECT eo.id_event, url, title, dt_event, hh_event,
+  COUNT(ao.id_user) FILTER(WHERE availability = false) not_available,
+  COUNT(ao.id_user) FILTER(WHERE availability = true) available
+FROM events e
+INNER JOIN event_options eo ON e.id = eo.id_event
+LEFT JOIN attendance a ON a.id_event = e.id
+LEFT JOIN attendee_options ao ON ao.id_option = eo.id AND a.id_user = ao.id_user
+GROUP BY eo.id_event, url, title, dt_event, hh_event
+ORDER BY eo.id_event, dt_event, hh_event;

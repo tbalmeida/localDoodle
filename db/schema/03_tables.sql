@@ -33,3 +33,14 @@ CREATE TABLE attendee_options (
   availability BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (id_user, id_option)
 );
+
+
+SELECT eo.id_event, url, title, dt_event, hh_event,
+  CASE availability WHEN 't' THEN 'Yes' ELSE 'No' END availability,
+  u.name, u.email
+FROM events e
+INNER JOIN event_options eo ON e.id = eo.id_event
+LEFT JOIN attendance a ON a.id_event = e.id
+LEFT JOIN users u ON a.id_user = u.id
+LEFT JOIN attendee_options ao ON ao.id_option = eo.id AND a.id_user = ao.id_user
+ORDER BY dt_event, hh_event, u.name;
