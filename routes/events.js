@@ -165,11 +165,25 @@ module.exports = (db) => {
     let secondPart = emailArr[1];
     console.log(email)
     let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
-    const usersData = db.query(`select username from users where url `) 
     const values = [req.body.url, req.body.title, req.body.location, req.body.description, req.body.date, req.body.time, req.body.organizer_username, req.body.id_option];
       db.query(`select updateEvent ($1, $2, $3, $4, $5, $6, $7, $8) as url` , values)
       .then(result => {
         res.redirect(route);
+      })
+  });
+
+  router.delete("/:id/delete", (req, res) => {
+    let id = res.params.id;
+    // let email = req.body.email;
+    // let emailArr = email.split('@');
+    // let firstPart = emailArr[0];
+    // let secondPart = emailArr[1];
+    // let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
+
+    const values = [id];
+      db.query(`delete from events where url = $1` , values)
+      .then(result => {
+        res.send('Deleted!');
       })
   });
   

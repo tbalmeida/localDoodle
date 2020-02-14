@@ -58,8 +58,8 @@
             </div>
             <div class="col">
                 <label for="time">Time</label>
-                <input type="text" id="time" name="time" class="form-control" placeholder="Time" value="<%=events[0].hh_event%>">
-            </div disabled>
+                <input type="text" id="time" name="time" class="form-control" placeholder="Time" value="<%=events[0].hh_event%>" disabled>
+            </div>
         </div>
         <div class="row">
             <div class="col">
@@ -83,20 +83,16 @@
         <div class="row">
             <div class="col">
                 <script>
-
                     function redirectToList() {
-                        console.log('hello world')
                         let email = document.getElementById("email").value;
-                        console.log(email);
                         let emailArr = email.split('@');
                         let firstPart = emailArr[0];
                         let secondPart = emailArr[1];
-                        console.log(email)
                         let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
                        window.location = route;
                       }
                 </script>
-                <button onclick = "redirectToList()" class="btn btn-primary">View all events</button>
+                <button onclick="redirectToList()" class="btn btn-primary">View all events</button>
             </div>
             <div class="col">
                 <button type="reset" class="btn btn-danger float-right">Reset</button>

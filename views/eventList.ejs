@@ -26,7 +26,10 @@
           <td><%= item.description %></td>
           <td><%- item.options.replace(',', '<br>') -%></td>
           <td><%= item.qty_attendees %></td>
-          <td><a href="events/<%=item.url%>/edit" class="btn btn-dark">Edit</a></td>
+          <td><a href="events/<%=item.url%>/edit" class="btn btn-primary">Edit</a> 
+            <form method="POST" action="events/<%=item.url%>/delete">
+              <button class="btn btn-danger">Delete</button></td>
+            </form>
         </tr>
       <% } %>
     <% } %>
