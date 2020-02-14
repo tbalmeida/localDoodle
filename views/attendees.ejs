@@ -1,0 +1,43 @@
+<%- include('partials/_header') %>
+
+<h2>List of attendeees</h2>
+
+<%if(events.length === 0) {%>
+  <p>Sorry there are no events found for you. Please add an event.</p>
+  <%}%>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Location</th>
+      <th scope="col">Description</th>
+      <th scope="col">Option</th>
+      <th scope="col">Attendee(quantity)</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (events) { %>
+      <% for (const item of events) { %>
+        <tr>
+          <th scope="row"><%=item.title%></th>
+          <td><%= item.location %></td>
+          <td><%= item.description %></td>
+          <td><%- item.options.replace(',', '<br>') -%></td>
+          <td><%= item.qty_attendees %></td>
+          <td><a href="events/<%=item.url%>/edit" class="btn btn-primary">Edit</a> 
+            <form method="POST" action="events/<%=item.url%>/delete">
+              <input type='hidden' name='id' value='<%=item.url%>'>
+              <input type='hidden' name='email' value='<%=userEmail%>'>
+              <button class="btn btn-danger">Delete</button></td>
+            </form>
+        </tr>
+      <% } %>
+    <% } %>
+    </tbody>
+  </table>
+  <a href="/events/new" type="button" class="btn btn-primary"> + </a>
+  
+
+<%- include('partials/_footer') %>

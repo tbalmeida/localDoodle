@@ -1,23 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Home Page</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    
-    
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-    <!-- <script src="https://code.jquery.com/jquery-1.12.4.js" defer></script> -->
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/timepicker.css" type="text/css" />
 
-  
-  </head>
-  <header>
     <%- include partials/_header %>
   </header>
   <body class="bg-light container">
@@ -60,13 +41,7 @@
                 <textarea name="description" id="description" class="form-control" rows="3" placeholder="Description of the event"></textarea>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <label for="Invitees">Invitees</label>
-                <textarea name="invitees" id="invitees" class="form-control" rows="3" placeholder="Type the emails separated by a comma"></textarea>
-            </div>
-        </div>
-        <div class="row">
+            <div class="row">
             <div class="col">
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
@@ -74,6 +49,7 @@
                 <button type="reset" class="btn btn-danger float-right">Reset</button>
             </div>
         </div>
+        <input type="hidden" name="ops" value="y">
     </form>
 
     <script src="https://code.jquery.com/jquery-3.4.1.js" 

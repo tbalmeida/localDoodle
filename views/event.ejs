@@ -1,48 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Home Page</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    
-    
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-    <!-- <script src="https://code.jquery.com/jquery-1.12.4.js" defer></script> -->
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/timepicker.css" type="text/css" />
-    <script type="text/javascript" src="/scripts/redirectToList.js" defer></script>
-    
-
-  
-  </head>
-  <header>
+   
     <%- include partials/_header %>
    
   </header>
-  <h2 class="text-center" >Your event was created and now you can copy the link</h2>
+<% if(ops) { %>
+    <h2 class="text-center" >Your event was created and now you can copy the link</h2>
+<%}%>  
+
   <body class="bg-light container">
+
       
         <div class="row">
             <div class="col">
                 <label for="url">URL</label>
                 <input type="text" name="url" id="url" class="form-control" placeholder="Url" value="http://localhost:8080/events/<%=events[0].url%>">
             </div>
-            <div class="col">
+            <div class="col link">
                 <button type="button" id="copy" class=" btn btn-primary float-right">Copy link</button>
             </div>
         </div> 
         <div class="row">
             <div class="col">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" class="form-control" placeholder="Name" value="<%=events[0].name%>" disabled>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Name" value="<%=events[0].organizer_name%>" disabled>
             </div>
             <div class="col">
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="<%=events[0].email%>" disabled>
+                <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="<%=events[0].organizer_email%>" disabled>
             </div>
         </div>
         <div class="row">
@@ -67,31 +50,61 @@
                 <input type="text" name="location" id="location" class="form-control" placeholder="Location" value="<%=events[0].location%>" disabled>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
                 <label for="Description">Description</label>
                 <textarea name="description" id="description" class="form-control" rows="3" placeholder="Description of the event" disabled><%=events[0].description%></textarea>
             </div>
         </div>
-        
-        <div class="row">
-            <div class="col">
-                <script>
-                    function redirectToList() {
-                        let email = document.getElementById("email").value;
-                        let emailArr = email.split('@');
-                        let firstPart = emailArr[0];
-                        let secondPart = emailArr[1];
-                        let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
-                       window.location = route;
-                      }
-                </script>
-                <button onclick="redirectToList()" class="btn btn-primary">View all events</button>
+        <% if(ops) { %>
+            
+            <div class="row">
+                <div class="col">
+                    <script>
+                        function redirectToList() {
+                            let email = document.getElementById("email").value;
+                            let emailArr = email.split('@');
+                            let firstPart = emailArr[0];
+                            let secondPart = emailArr[1];
+                            let route = `/events?organizerEmail=${firstPart}%40${secondPart}`;
+                           window.location = route;
+                          }
+                    </script>
+                    <button onclick="redirectToList()" class="btn btn-primary">View all events</button>
+                </div>
+                <div class="col">
+                    <button type="reset" class="btn btn-danger float-right">Reset</button>
+                </div>
             </div>
-            <div class="col">
-                <button type="reset" class="btn btn-danger float-right">Reset</button>
-            </div>
-        </div>
+        <%} else { %>
+            <hr>
+            Will you join <%=events[0].organizer_name%>?
+            <form method="POST" action='/events/<%=events[0].url%>/attendance/new'> 
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="name">Name</label>
+                        <input type="text" name="attendee_name" id="attendee_name" class="form-control" placeholder="Name" value="" >
+                    </div>
+                    <div class="col">
+                        <label for="email">Email</label>
+                        <input type="text" id="attendee_email" name="attendee_email" class="form-control" placeholder="Email" value="" >
+                    </div>
+                </div>
+                Are you available?
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="true">
+                    <label class="form-check-label" for="inlineRadio1">Yes</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="false">
+                    <label class="form-check-label" for="inlineRadio2">No</label>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <input type="hidden" name='url' value='<%=events[0].url%>'>
+                  <input type="hidden" name='id_option' value='<%=events[0].id_option%>'>
+                  
+            </form>
+        <%}%>  
 
     <script src="https://code.jquery.com/jquery-3.4.1.js" 
     integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
